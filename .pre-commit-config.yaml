@@ -1,0 +1,35 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+
+  - repo: local
+    hooks:
+      - id: isort
+        name: isort
+        entry: bash -c 'cd backend && files=(); for f in "$@"; do files+=("${f#backend/}"); done; poetry run isort "${files[@]}"' --
+        language: system
+        types: [python]
+        files: ^backend/.*\.py$
+      - id: yapf
+        name: yapf
+        entry: bash -c 'cd backend && files=(); for f in "$@"; do files+=("${f#backend/}"); done; poetry run yapf --in-place "${files[@]}"' --
+        language: system
+        types: [python]
+        files: ^backend/.*\.py$
+      - id: pylint
+        name: pylint
+        entry: bash -c 'cd backend && files=(); for f in "$@"; do files+=("${f#backend/}"); done; poetry run pylint --max-line-length=200 --disable=missing-module-docstring --disable=missing-class-docstring --disable=missing-function-docstring "${files[@]}"' --
+        language: system
+        types: [python]
+        files: ^backend/.*\.py$
+      - id: mypy
+        name: mypy
+        entry: bash -c 'cd backend && files=(); for f in "$@"; do files+=("${f#backend/}"); done; MYPYPATH=. poetry run mypy "${files[@]}"' --
+        language: system
+        types: [python]
+        files: ^backend/.*\.py$
