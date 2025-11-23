@@ -11,25 +11,25 @@ repos:
     hooks:
       - id: isort
         name: isort
-        entry: bash -c 'cd backend && files=(); for f in "$@"; do files+=("${f#backend/}"); done; poetry run isort "${files[@]}"' --
+        entry: isort
         language: system
         types: [python]
-        files: ^backend/.*\.py$
+        pass_filenames: true
       - id: yapf
         name: yapf
-        entry: bash -c 'cd backend && files=(); for f in "$@"; do files+=("${f#backend/}"); done; poetry run yapf --in-place "${files[@]}"' --
+        entry: poetry run yapf -i
         language: system
         types: [python]
-        files: ^backend/.*\.py$
+        pass_filenames: true
       - id: pylint
         name: pylint
-        entry: bash -c 'cd backend && files=(); for f in "$@"; do files+=("${f#backend/}"); done; poetry run pylint --max-line-length=200 --disable=missing-module-docstring --disable=missing-class-docstring --disable=missing-function-docstring "${files[@]}"' --
+        entry: poetry run pylint
         language: system
         types: [python]
-        files: ^backend/.*\.py$
+        pass_filenames: true
       - id: mypy
         name: mypy
-        entry: bash -c 'cd backend && files=(); for f in "$@"; do files+=("${f#backend/}"); done; MYPYPATH=. poetry run mypy "${files[@]}"' --
+        entry: poetry run mypy
         language: system
         types: [python]
-        files: ^backend/.*\.py$
+        pass_filenames: true
