@@ -13,7 +13,6 @@ from app.logger import logger
 
 app = FastAPI(title="Hackathon API", description="API for the hackathon project")
 
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
