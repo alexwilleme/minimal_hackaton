@@ -6,7 +6,7 @@ import pandas as pd
 from app.models.time_series import DailyTimeSeriesData
 
 
-def get_mock_daily_time_series_data(data_identifier: str, start_date: dt.date, end_date: dt.date) -> list[DailyTimeSeriesData]:
+def get_mock_daily_time_series_data(data_identifier: str, start_date: dt.date, end_date: dt.date) -> pd.DataFrame:
     """
     Get mock daily time series data
     """
@@ -22,4 +22,4 @@ def get_mock_daily_time_series_data(data_identifier: str, start_date: dt.date, e
     df = df[df["date"] >= start_date]
     df = df[df["date"] <= end_date]
     df = df.sort_values(by="date")
-    return [DailyTimeSeriesData(**record) for record in df.to_dict(orient="records")]  # type: ignore
+    return df

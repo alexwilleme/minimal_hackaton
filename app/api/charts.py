@@ -5,6 +5,7 @@ Charts API
 from fastapi import APIRouter
 
 from app.api.constants import MULTI_LINES_CHART_PATH
+from app.config import ConfigManager
 from app.logger import logger
 from app.models.time_series import DailyTimeSeriesData
 from app.queries.time_series import get_mock_daily_time_series_data
@@ -24,6 +25,14 @@ async def multi_lines_chart(request: MultiLinesChartRequest) -> MultiLinesChartR
     start_date = request.start_date
     end_date = request.end_date
 
-    data: dict[str, list[DailyTimeSeriesData]] = {identifier: get_mock_daily_time_series_data(identifier, start_date, end_date) for identifier in data_identifiers}
+    data: dict[str, list[DailyTimeSeriesData]] = {}
+
+    for identifier in data_identifiers:
+        df = get_mock_daily_time_series_data(identifier, start_date, end_date)
+        data_for_id = [DailyTimeSeriesData(**record) for record in df.to_dict(orient="records")]  # type: ignore
+        data |= {identifier: data_for_id}
+
+    config = ConfigManager().get_config()
+    logger.info(str(config))
 
     return MultiLinesChartResponse(data=data, start_date=request.start_date, end_date=request.end_date)

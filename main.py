@@ -8,7 +8,8 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.api.charts import router as charts_routers
+from app.api.charts import router as charts_router
+from app.api.tables import router as tables_router
 from app.logger import logger
 
 app = FastAPI(title="Hackathon API", description="API for the hackathon project")
@@ -80,7 +81,8 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     )
 
 
-app.include_router(charts_routers)
+app.include_router(charts_router)
+app.include_router(tables_router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
